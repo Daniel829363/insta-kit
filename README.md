@@ -42,7 +42,7 @@ cp -r insta-kit/skills/* ~/.claude/skills/
 | `ig-caption` | Подпись: превью первых 125 символов, один призыв, кодовое слово, 3-5 хештегов, без ссылок | «напиши подпись» |
 | `ig-human` | Чистка русских ИИ-штампов, длинных тире и невидимых символов | «убери ИИ-штампы» |
 
-Скрипты (Python 3.10+, только стандартная библиотека): `outliers.py`, `audit.py`, `hookscore.py`, `beats.py`, `caption.py`, `clean.py`, `tts_elevenlabs.py`. Тесты: `python tests/run_tests.py`.
+Скрипты (Python 3.10+, только стандартная библиотека): `outliers.py`, `audit.py`, `collect.py`, `hookscore.py`, `beats.py`, `caption.py`, `clean.py`, `tts_elevenlabs.py`. Тесты: `python tests/run_tests.py`.
 
 ## Видео: то, чего нет у других наборов
 
