@@ -1,0 +1,15 @@
+[
+  {
+    "key": "main",
+    "username": "example_account",
+    "niche": "карго и доставка из Китая в Кыргызстан",
+    "composio_account": "ca_xxxxxxxx",
+    "competitors": ["competitor_one", "competitor_two", "competitor_three"]
+  },
+  {
+    "key": "second",
+    "username": "another_account",
+    "niche": "учёт рабочего времени для малого бизнеса",
+    "competitors": []
+  }
+]
