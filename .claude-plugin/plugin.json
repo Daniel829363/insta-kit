@@ -3,7 +3,7 @@
   "description": "Набор из 11 русскоязычных скиллов для Instagram: поиск залетевших рилсов, разбор своих постов, оценка профиля, недельный контент-план (ig-plan), сценарии с оценкой хуков, подписи, чистка ИИ-штампов, а также видеоблок: монтаж под Reels (ig-cut), шортсы из длинного видео (ig-shorts), ролик без съёмки с озвучкой и Remotion (ig-video) и публикация через Composio (ig-publish). Ничего не публикуется без вашего «да».",
   "version": "0.3.0",
   "author": {
-    "name": "<автор>"
+    "name": "Daniel Sydykov"
   },
   "license": "MIT",
   "keywords": [
@@ -16,9 +16,10 @@
     "хуки",
     "подписи",
     "video",
-    "reels",
     "ffmpeg",
     "remotion",
     "elevenlabs"
-  ]
+  ],
+  "homepage": "https://github.com/Daniel829363/insta-kit",
+  "repository": "https://github.com/Daniel829363/insta-kit"
 }

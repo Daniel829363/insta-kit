@@ -3,14 +3,15 @@
   "name": "insta-kit",
   "description": "insta-kit: русскоязычные скиллы для Instagram",
   "owner": {
-    "name": "<автор>"
+    "name": "Daniel Sydykov"
   },
   "plugins": [
     {
       "name": "insta-kit",
       "description": "Одиннадцать скиллов: ig-viral, ig-audit, ig-profile, ig-plan, ig-reel, ig-caption, ig-human, ig-cut, ig-shorts, ig-video, ig-publish.",
       "source": "./",
-      "category": "productivity"
+      "category": "productivity",
+      "homepage": "https://github.com/Daniel829363/insta-kit"
     }
   ]
 }

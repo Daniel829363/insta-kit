@@ -9,14 +9,14 @@
 Через маркетплейс плагинов:
 
 ```
-/plugin marketplace add <owner>/insta-kit
+/plugin marketplace add Daniel829363/insta-kit
 /plugin install insta-kit@insta-kit
 ```
 
 Или вручную, как обычные скиллы:
 
 ```
-git clone https://github.com/<owner>/insta-kit
+git clone https://github.com/Daniel829363/insta-kit
 cp -r insta-kit/skills/* ~/.claude/skills/
 ```
 
