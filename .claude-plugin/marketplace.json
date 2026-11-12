@@ -2,11 +2,13 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "insta-kit",
   "description": "insta-kit: русскоязычные скиллы для Instagram",
-  "owner": { "name": "<автор>" },
+  "owner": {
+    "name": "<автор>"
+  },
   "plugins": [
     {
       "name": "insta-kit",
-      "description": "Шесть скиллов: ig-viral, ig-audit, ig-profile, ig-reel, ig-caption, ig-human.",
+      "description": "Десять скиллов: ig-viral, ig-audit, ig-profile, ig-reel, ig-caption, ig-human, ig-cut, ig-shorts, ig-video, ig-publish.",
       "source": "./",
       "category": "productivity"
     }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Дымовые тесты скриптов insta-kit. Запуск: python tests/run_tests.py"""
-import os, sys, json, subprocess
+import os, sys, json, subprocess, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FX = os.path.join(ROOT, "tests", "fixtures")
@@ -42,6 +42,23 @@ out = run(os.path.join(S, "ig-caption", "caption.py"), os.path.join(FX, "caption
 check("caption: рамка и проверки", "Как увидят в ленте" in out and "хештегов" in out)
 out = run(os.path.join(S, "ig-human", "clean.py"), os.path.join(FX, "slop.txt"))
 check("clean: штампы удалены, нет ZWSP", "в современном мире" not in out.split("ОЧИЩЕННЫЙ ТЕКСТ")[1].lower() and "​" not in out)
+# --- видеоблок: tts_elevenlabs.py без сети ---
+TTS = os.path.join(S, "ig-video", "tts_elevenlabs.py")
+out = run(TTS, os.path.join(FX, "tts_script.txt"), "--voice-id", "TEST_VOICE", "--dry-run")
+check("tts dry-run: эндпоинт with-timestamps", "/v1/text-to-speech/TEST_VOICE/with-timestamps" in out)
+check("tts dry-run: eleven_v3 и ru по умолчанию", '"model_id": "eleven_v3"' in out and '"language_code": "ru"' in out)
+check("tts dry-run: весь текст одним запросом", "Привет, мир!\\n\\nГотово." in out and "символов (стоимость: 1 кредит за символ): 31" in out)
+check("tts dry-run: ключ не печатается", "xi-api-key: <ELEVENLABS_API_KEY" in out)
+out = run(TTS, os.path.join(FX, "tts_script.txt"), "--voice-id", "X", "--model", "eleven_multilingual_v2", "--dry-run")
+check("tts dry-run: multilingual_v2 с similarity/style", "similarity_boost" in out and "eleven_multilingual_v2" in out)
+with tempfile.TemporaryDirectory() as tmp:
+    run(TTS, "--from-alignment", os.path.join(FX, "el_alignment.json"), "--text", os.path.join(FX, "tts_script.txt"),
+        "--out-dir", tmp, "--name", "t")
+    doc = json.load(open(os.path.join(tmp, "t.words.json"), encoding="utf-8"))
+    ws = doc["words"]
+    check("words: 3 слова, тег [excited] отброшен", [w["w"] for w in ws] == ["Привет,", "мир!", "Готово."])
+    check("words: тайминги не убывают", all(a["end"] <= b["start"] + 1e-9 for a, b in zip(ws, ws[1:])) and ws[0]["start"] >= 0)
+    check("words: строки размечены", [l["text"] for l in doc.get("lines", [])] == ["Привет, мир!", "Готово."] and ws[2]["line"] == 1)
 for f in (".claude-plugin/plugin.json", ".claude-plugin/marketplace.json", "templates/accounts.example.json",
           "skills/ig-reel/hooks.json", "skills/ig-profile/rubric.json", "skills/ig-human/slop_ru.json"):
     try:
