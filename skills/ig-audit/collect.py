@@ -2,7 +2,7 @@
 """collect.py: собирает последние посты аккаунта через Composio CLI в CSV для audit.py. Только чтение.
 
 Использование:
-  python collect.py --account smartcargo --out posts.csv [--limit 50] [--no-duration]
+  python collect.py --account main --out posts.csv [--limit 50] [--no-duration]
 --account: key из ~/.claude/insta-kit/accounts.json или сам composio-аккаунт (ca_...).
 Без --account берётся единственный аккаунт из файла.
 composio ищется в PATH, иначе через `wsl -d Ubuntu -u root -- bash -lc`.
