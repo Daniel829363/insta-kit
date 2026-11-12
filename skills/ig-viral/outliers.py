@@ -6,7 +6,11 @@
 videoDuration, videoPlayCount, likesCount, commentsCount, timestamp.
 
 Использование:
-  python outliers.py data.json [--top 10] [--min-multiple 3] [--md out.md] [--json out.json]
+  python outliers.py data.json [--top 10] [--min-multiple 3] [--accounts a,b,c] [--per-account 2]
+                               [--md out.md] [--json out.json]
+  --accounts     считать только эти аккаунты (Apify иногда подмешивает чужие: коллабы, репосты)
+  --per-account  не больше N рилсов одного аккаунта в топе (один гигант не вытесняет остальных)
+  url не обязателен: если его нет, ссылка строится из shortCode
   cat data.csv | python outliers.py - --top 15
 Кратность >= 3x: сигнал. < 1.5x: шум.
 """
@@ -76,7 +80,8 @@ def normalize(rows):
         out.append({
             "account": str(pick(r, "ownerUsername") or "?").lstrip("@"),
             "code": pick(r, "shortCode") or "",
-            "url": pick(r, "url") or "",
+            "url": pick(r, "url") or (
+                "https://www.instagram.com/reel/%s/" % pick(r, "shortCode") if pick(r, "shortCode") else ""),
             "caption": str(pick(r, "caption") or "").replace("\n", " "),
             "transcript": pick(r, "transcript") or "",
             "duration": num(pick(r, "videoDuration")),
@@ -117,6 +122,8 @@ def main():
     ap.add_argument("file")
     ap.add_argument("--top", type=int, default=10)
     ap.add_argument("--min-multiple", type=float, default=0.0)
+    ap.add_argument("--accounts", help="через запятую; остальные аккаунты отбрасываются")
+    ap.add_argument("--per-account", type=int, default=0, help="максимум рилсов одного аккаунта в топе (0 = без лимита)")
     ap.add_argument("--md")
     ap.add_argument("--json", dest="jsonout")
     a = ap.parse_args()
@@ -125,11 +132,21 @@ def main():
     else:
         text = open(a.file, encoding="utf-8-sig").read()
     items = normalize(load(text))
+    if a.accounts:
+        keep = {x.strip().lstrip("@").lower() for x in a.accounts.split(",") if x.strip()}
+        items = [i for i in items if i["account"].lower() in keep]
     if not items:
         print("Нет рилсов с просмотрами. Проверьте поля входного файла.")
         return 1
     items, med = analyze(items)
-    shown = [i for i in items if i["multiple"] >= a.min_multiple][: a.top]
+    shown, cnt = [], {}
+    for i in items:
+        if i["multiple"] < a.min_multiple or len(shown) >= a.top:
+            continue
+        if a.per_account and cnt.get(i["account"], 0) >= a.per_account:
+            continue
+        cnt[i["account"]] = cnt.get(i["account"], 0) + 1
+        shown.append(i)
 
     print("Медианы просмотров по аккаунтам:")
     for acc, m in sorted(med.items(), key=lambda kv: -kv[1]):

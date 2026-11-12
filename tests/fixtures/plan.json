@@ -1,0 +1,14 @@
+{
+  "account": "example_account", "timezone": "Asia/Bishkek", "start": "2026-11-16", "code_word": "ПЛАН",
+  "repeat_ok": [],
+  "days": [
+    {"date": "2026-11-16", "time": "19:00", "format": "reel", "topic": "разбор ошибки", "hook_id": 1, "goal": "reach", "cta": "Сохрани, чтобы не потерять", "skill": "ig-reel", "stories": "опрос"},
+    {"date": "2026-11-17", "time": "19:00", "format": "carousel", "topic": "чек-лист", "goal": "saves", "cta": "Сохрани чек-лист", "skill": "ig-caption", "stories": "закулисье"},
+    {"date": "2026-11-18", "time": "19:00", "format": "reel", "topic": "кейс", "hook_id": 13, "goal": "leads", "cta": "Напиши ПЛАН в директ", "skill": "ig-video", "stories": "ответы"},
+    {"date": "2026-11-19", "time": "19:00", "format": "reel", "topic": "миф", "hook_id": 17, "goal": "reach", "cta": "Перешли коллеге", "skill": "ig-cut", "stories": "тест"},
+    {"date": "2026-11-20", "time": "19:00", "format": "carousel", "topic": "сравнение", "goal": "saves", "cta": "Сохрани", "skill": "ig-caption", "stories": "опрос"},
+    {"date": "2026-11-21", "time": "12:00", "format": "reel", "topic": "история", "hook_id": 15, "goal": "reach", "cta": "Подпишись", "skill": "ig-reel", "stories": "день"},
+    {"date": "2026-11-22", "time": "12:00", "format": "stories", "topic": "итоги недели", "goal": "leads", "cta": "Напиши ПЛАН", "skill": "-", "stories": "итоги"}
+  ],
+  "engage": ["a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10"]
+}

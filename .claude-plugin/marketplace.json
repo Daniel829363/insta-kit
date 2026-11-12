@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "insta-kit",
-      "description": "Десять скиллов: ig-viral, ig-audit, ig-profile, ig-reel, ig-caption, ig-human, ig-cut, ig-shorts, ig-video, ig-publish.",
+      "description": "Одиннадцать скиллов: ig-viral, ig-audit, ig-profile, ig-plan, ig-reel, ig-caption, ig-human, ig-cut, ig-shorts, ig-video, ig-publish.",
       "source": "./",
       "category": "productivity"
     }

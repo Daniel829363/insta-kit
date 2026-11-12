@@ -34,6 +34,14 @@ check("приветствие < 20", hs[2]["score"] < 20)
 
 out = run(os.path.join(S, "ig-viral", "outliers.py"), os.path.join(FX, "apify_reels.json"), "--top", "5")
 check("outliers: есть сигналы >= 3x", "сигнал" in out and "Итого: 20" in out)
+out = run(os.path.join(S, "ig-viral", "outliers.py"), os.path.join(FX, "apify_reels.json"), "--accounts", "@Cargo_Demo", "--per-account", "1", "--top", "5")
+check("outliers: --accounts и --per-account", "Итого: 10" in out and "smm_demo" not in out and out.count("@cargo_demo") <= 2 and "Топ-1 " in out)
+with tempfile.TemporaryDirectory() as tmp:
+    rows = [{"ownerUsername": "a", "shortCode": "AbC%d" % i, "videoPlayCount": v} for i, v in enumerate([100, 100, 100, 5000])]
+    src = os.path.join(tmp, "r.json")
+    json.dump(rows, open(src, "w"))
+    run(os.path.join(S, "ig-viral", "outliers.py"), src, "--md", os.path.join(tmp, "o.md"))
+    check("outliers: без url ссылка строится из shortCode", "https://www.instagram.com/reel/AbC3/" in open(os.path.join(tmp, "o.md"), encoding="utf-8").read())
 out = run(os.path.join(S, "ig-audit", "audit.py"), os.path.join(FX, "audit_posts.csv"))
 check("audit: три таблицы", "ТОП по охвату" in out and "досмотру" in out)
 # --- ig-audit: типы, порог, свежие посты ---
@@ -105,6 +113,17 @@ with tempfile.TemporaryDirectory() as tmp:
     check("words: 3 слова, тег [excited] отброшен", [w["w"] for w in ws] == ["Привет,", "мир!", "Готово."])
     check("words: тайминги не убывают", all(a["end"] <= b["start"] + 1e-9 for a, b in zip(ws, ws[1:])) and ws[0]["start"] >= 0)
     check("words: строки размечены", [l["text"] for l in doc.get("lines", [])] == ["Привет, мир!", "Готово."] and ws[2]["line"] == 1)
+out = run(os.path.join(S, "ig-plan", "plan.py"), os.path.join(FX, "plan.json"))
+check("plan: таблица с формулами хука и 10 аккаунтами", "13 Цифра результата" in out and "10. @a10" in out and "Только сторис" in out)
+check("plan: предупреждение о повторе формата два дня подряд", "два дня подряд (2026-11-18 и 2026-11-19)" in out and out.count("## Предупреждения") == 1)
+bad = {"days": [{"date": "2026-11-16", "time": "", "format": "reel", "goal": "leads", "cta": "Сохрани. Напиши. Перешли."}], "code_word": "КИТ", "engage": ["x"]}
+with tempfile.TemporaryDirectory() as tmp:
+    pj = os.path.join(tmp, "bad.json")
+    json.dump(bad, open(pj, "w", encoding="utf-8"), ensure_ascii=False)
+    out = run(os.path.join(S, "ig-plan", "plan.py"), pj, "--csv", os.path.join(tmp, "p.csv"))
+    check("plan: ловит 1 день, нет hook_id, кодового слова, времени, 10 аккаунтов",
+          all(x in out for x in ("нужно 7", "нет hook_id", "нет кодового слова", "нет времени", "нужно 10", "больше одного предложения")))
+    check("plan: CSV записан", os.path.exists(os.path.join(tmp, "p.csv")))
 for f in (".claude-plugin/plugin.json", ".claude-plugin/marketplace.json", "templates/accounts.example.json",
           "skills/ig-reel/hooks.json", "skills/ig-profile/rubric.json", "skills/ig-human/slop_ru.json"):
     try:
