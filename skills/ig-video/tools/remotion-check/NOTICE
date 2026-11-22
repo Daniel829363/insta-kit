@@ -1,0 +1,32 @@
+remotion-check
+Copyright (c) 2026 the owner of this workstation.
+
+This tool is an independent re-implementation, for Remotion, of the ideas of
+`hyperframes check` / `hyperframes layout` from HeyGen HyperFrames.
+
+Portions of the logic and thresholds were ported (read from the published source and rewritten, not copied
+verbatim as a library) from:
+
+  HyperFrames (https://github.com/heygen-com/hyperframes)
+  Copyright (c) HeyGen
+  Licensed under the Apache License, Version 2.0
+
+Specifically derived from the following HyperFrames components:
+  - layout-audit.browser.js   (text overflow / clipped text / container overflow / content overlap /
+                               text occlusion by elementsFromPoint grid / invisible text / escaped container /
+                               canvas edge checks, 2 px tolerance, persistence tiering of findings)
+  - contrast-audit.browser.js (WCAG AA 4.5:1 / 3:1 for large text, background sampling with the glyph colour hidden,
+                               stroke handling, large-text definition 24 px or 19 px bold)
+  - craftAudit.ts             (line_unread floors: 0.4 s for 1-2 words, otherwise 0.75 * (0.5 s + 0.3 s/word),
+                               final line >= 2 s; text_below_floor = 2.6% of the short side held >= 0.5 s;
+                               dead_stretch > 3 s with the last 3 s excluded; film_silent > 15 s;
+                               first_frame_empty; bisection refinement of on-screen windows)
+  - contrast-bg.ts            (relative luminance, contrast ratio, suggested compliant foreground colour)
+
+Changes made: the DOM probes were rewritten for the Remotion DOM (root #remotion-canvas, no data-* timeline
+attributes), frame seeking uses Remotion's own renderer internals (makePage / seekToFrame), additional checks
+(font fallback via CSS.getPlatformFontsForNode, Reels safe zones, ghost text, subtitle-stream heuristic,
+ffmpeg-based video checks) were added, and all report text is in Russian.
+
+The Apache License 2.0 text is available at https://www.apache.org/licenses/LICENSE-2.0
+This tool itself is released under the Apache License 2.0 as well.

@@ -1,0 +1,2 @@
+refmeasure.py вызывает CLI `hyperframes measure` из пакета hyperframes (HeyGen, Apache-2.0,
+https://github.com/heygen-com/hyperframes). Пакет не входит в плагин и ставится отдельно.

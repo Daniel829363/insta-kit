@@ -15,6 +15,7 @@ description: Делает рилс без съёмки, формат «объя�
 | Node.js 18+ и Remotion | рендер графики | `node -v`; проект `npx create-video@latest`; скилл `remotion-best-practices`, если установлен, читай перед кодом |
 | FFmpeg 6.1+ | нарезка звука, сведение, громкость | `ffmpeg -version` |
 | ffmpeg-skill | проверка перед публикацией | см. `ig-cut` (`npx ffmpeg-skill`) |
+| hyperframes 0.9.7 (необязательно) | разбор референса в цифрах | `npm i --prefix ~/.claude/insta-kit/hf hyperframes@0.9.7 --ignore-scripts` |
 
 ## 1. Идея и сценарий
 Прочитай `~/.claude/insta-kit/accounts.json` и `voice-<key>.md` (тон, табу, кодовое слово). Уточни одним вопросом: о чём ролик, для кого, какая цифра или результат, длительность (30-45 с), призыв. Сценарий пиши по `ig-reel`: 3 хука, оценка `hookscore.py`, построчный сценарий `устная строка | текст на экране`, проверка `beats.py`. Прогони устный текст через `ig-human`.
@@ -56,6 +57,7 @@ python "${CLAUDE_PLUGIN_ROOT}/skills/ig-video/tts_elevenlabs.py" voice.txt --voi
 - **Всегда отдавай две версии:** с музыкой и без музыки (`-nobgm`): пользователь может добавить трендовый звук в Instagram сам.
 
 ## 5. Рендер и превью
+0. **Автопроверка** до любого показа: `node "${CLAUDE_PLUGIN_ROOT}/skills/ig-video/tools/remotion-check/check.mjs" --project <папка> --comp <Id> --reels-safe` (подробно в `montage.md`, раздел «Проверка перед выдачей»). Ошибки исправь сам, потом показывай. Если есть референс — сверь темп: `tools/ref-measure/refmeasure.py ref.mp4 --ours out/video.mp4`.
 1. До финального рендера покажи превью: один ключевой кадр `npx remotion still <Composition> out/frame.png --frame <N>` или кусок 10 секунд `npx remotion render <Composition> out/preview.mp4 --frames=0-299`. Отправь пользователю, жди правок.
 2. Финал: `npx remotion render <Composition> out/video.mp4` (1080x1920, 30 fps, h264). Не запускай рендер без «да» на превью.
 3. Громкость и проверка:
